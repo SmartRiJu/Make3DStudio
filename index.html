@@ -1,264 +1,709 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Make3D Studio – 3D-Druck &amp; Konstruktion in Neumarkt i.d.OPf.</title>
-<meta name="description" content="Make3D Studio fertigt 3D-gedruckte Teile nach deiner Idee, gefundenen Dateien oder eigener Konstruktion. Modellierung, Prototypen, Kleinserien – PLA, PETG, ABS. Anfrage jederzeit möglich.">
-<link rel="icon" href="/assets/favicon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Poppins:ital@0;1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/style.css">
-</head>
-<body>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#1C1426">
+<title>Make3D Studio – 3D-Druck in Neumarkt i.d.OPf.</title>
+<meta name="description" content="Make3D Studio konstruiert und druckt in Neumarkt i.d.OPf.: Ersatzteile, Prototypen, Deko, Geschenke, Urnen und Erinnerungsstücke – vom Einzelstück bis zur Kleinserie.">
+<link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Geist";font-style:normal;font-weight:300 700;font-display:swap;src:url(/assets/fonts/geist-latin.woff2) format("woff2")}
+:root{
+  --dark:#1C1426;
+  --dark-2:#281D35;
+  --on-dark:#F2EEF4;
+  --on-dark-2:#B9AFC5;
+  --bg:#F1EEEE;
+  --tone:#E6E1E3;
+  --tone-2:#DBD3E2;
+  --ink:#1C1426;
+  --muted:#554B60;
+  --accent:#C7B2EC;
+  --accent-deep:#7A5BA8;
+  --mist:#DDD2EC;
 
-<header class="site-header">
-  <div class="wrap header-inner">
-    <a href="/" class="brand">
-      <img src="/assets/logo.png" alt="Make3D Studio" class="brand-logo">
-    </a>
-    <nav class="main-nav">
-      <a href="#leistungen">Leistungen</a>
-      <a href="#materialien">Materialien</a>
-      <a href="#ablauf">Ablauf</a>
-      <a href="#galerie">Galerie</a>
-      <a href="#anfrage" class="nav-cta">Anfrage stellen</a>
-    </nav>
-    <button class="nav-toggle" aria-label="Menü öffnen" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
+  --f:"Geist", system-ui, sans-serif;
+  --step-small:0.9375rem;
+  --step-body:clamp(1.0625rem, 1rem + 0.2vw, 1.1875rem);
+  --step-lead:clamp(1.25rem, 1.05rem + 0.7vw, 1.75rem);
+  --step-head:clamp(2.5rem, 1.4rem + 3.6vw, 5rem);
+  --step-display:clamp(3.25rem, 1rem + 7.6vw, 9.5rem);
+
+  --m:clamp(16px, 2.4vw, 40px);
+  --gap:clamp(96px, 11vw, 192px);
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:var(--step-body);line-height:1.5;-webkit-font-smoothing:antialiased}
+svg,canvas{display:block;max-width:100%}
+a{color:inherit}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent-deep);outline-offset:3px}
+::selection{background:var(--accent);color:var(--ink)}
+h1,h2,h3{font-weight:600;letter-spacing:-0.035em;line-height:.98}
+.num{font-variant-numeric:tabular-nums}
+.wrap{padding-left:var(--m);padding-right:var(--m)}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:56px;padding:0 28px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;font-weight:600;font-size:var(--step-body);background:var(--ink);color:var(--on-dark);transition:transform .3s var(--ease),background-color .3s var(--ease)}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:scale(.97)}
+.btn .arr{transition:transform .3s var(--ease)}
+.btn:hover .arr{transform:translateX(4px)}
+.btn-light{background:var(--accent);color:var(--ink)}
+.btn-light:hover{background:#D8C8F3}
+.btn-ghost{background:var(--dark-2);color:var(--on-dark)}
+.btn-ghost:hover{background:#33264A}
+.link{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.25em;transition:text-decoration-thickness .2s}
+.link:hover{text-decoration-thickness:3px}
+
+/* ============ NAV ============ */
+.nav{position:sticky;top:0;z-index:20;background:var(--dark);color:var(--on-dark);display:flex;align-items:center;justify-content:space-between;gap:24px;height:72px}
+.brand{white-space:nowrap;font-weight:700;font-size:1.25rem;letter-spacing:-0.03em;text-decoration:none;display:flex;align-items:center;gap:10px}
+.brand-mark{width:26px;height:26px}
+.nav ul{list-style:none;display:flex;gap:32px}
+.nav ul a{text-decoration:none;color:var(--on-dark-2);transition:color .2s}
+.nav ul a:hover{color:var(--on-dark)}
+.nav .btn{min-height:44px;padding:0 20px;font-size:var(--step-small);white-space:nowrap}
+
+/* ============ HERO ============ */
+.hero{background:var(--dark);color:var(--on-dark);padding-top:clamp(32px,5vw,72px);padding-bottom:var(--m);min-height:calc(100svh - 72px);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;align-items:stretch}
+.hero-text{grid-column:1 / 7;padding-right:12px;display:flex;flex-direction:column;justify-content:center;padding-bottom:6vh}
+.hero h1{font-size:clamp(3rem,.4rem + 5.5vw,7.5rem);letter-spacing:-0.05em;line-height:.94}
+.hero .lede{margin-top:36px;max-width:36ch;font-size:var(--step-lead);line-height:1.35;color:var(--on-dark)}
+.hero-actions{margin-top:40px;display:flex;flex-wrap:wrap;gap:12px}
+.hero-facts{margin-top:56px;display:flex;flex-wrap:wrap;gap:12px 36px;color:var(--on-dark-2);font-size:var(--step-small)}
+.hero-facts b{display:block;color:var(--on-dark);font-size:var(--step-lead);font-weight:600;letter-spacing:-0.02em}
+
+.printer{grid-column:7 / 13;position:relative;background:var(--dark-2);border-radius:28px;overflow:hidden;min-height:560px;display:flex;flex-direction:column}
+.printer canvas{position:absolute;inset:0;width:100%;height:100%;cursor:grab;touch-action:pan-y}
+.printer canvas:active{cursor:grabbing}
+.p-top{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:24px 24px 0;pointer-events:none}
+.p-status{font-size:var(--step-small);color:var(--on-dark-2);line-height:1.4}
+.p-status b{display:block;color:var(--on-dark);font-weight:600;font-size:var(--step-body)}
+.p-bar{width:160px;height:6px;background:#3A2B4D;border-radius:6px;margin-top:10px;overflow:hidden}
+.p-bar i{display:block;height:100%;width:0;background:var(--accent);border-radius:6px}
+.p-hint{font-size:var(--step-small);color:var(--on-dark-2);text-align:right}
+.p-controls{position:relative;z-index:2;margin-top:auto;padding:20px 24px 24px;display:flex;flex-direction:column;gap:14px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:0;cursor:pointer;border-radius:999px;padding:10px 18px;background:#33264A;color:var(--on-dark);font-size:var(--step-small);font-weight:500;transition:background-color .25s,color .25s,transform .2s}
+.seg button:hover{background:#3D2E56}
+.seg button[aria-pressed="true"]{background:var(--on-dark);color:var(--ink)}
+.swatches{display:flex;gap:10px;align-items:center}
+.swatches span{font-size:var(--step-small);color:var(--on-dark-2);margin-right:6px}
+.sw{width:32px;height:32px;border-radius:50%;border:0;cursor:pointer;transition:transform .2s var(--ease),outline-color .2s;outline:2px solid transparent;outline-offset:3px}
+.sw:hover{transform:scale(1.12)}
+.sw[aria-pressed="true"]{outline-color:var(--on-dark)}
+.p-fallback{display:none;position:absolute;inset:0;align-items:center;justify-content:center;color:var(--on-dark-2);padding:40px;text-align:center}
+.no-gl .p-fallback{display:flex}
+
+/* ============ SHOP ============ */
+.shop{padding-top:var(--gap);padding-bottom:var(--gap)}
+.shop-head{grid-column:1 / 13;display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap}
+.shop-head h2{font-size:var(--step-head);max-width:10ch}
+.shop-head p{max-width:42ch;color:var(--ink)}
+.tabs{grid-column:1 / 13;margin-top:48px;display:flex;flex-wrap:wrap;gap:8px}
+.tab{border:0;cursor:pointer;border-radius:999px;padding:12px 20px;background:var(--tone);font-weight:500;font-size:var(--step-small);transition:background-color .25s,color .25s,transform .2s}
+.tab:hover{background:var(--tone-2)}
+.tab[aria-pressed="true"]{background:var(--ink);color:var(--on-dark)}
+.products{grid-column:1 / 13;list-style:none;margin-top:32px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.product{position:relative;display:grid;grid-template-columns:140px 1fr;gap:24px;align-items:center;background:var(--tone);border-radius:24px;padding:20px 28px 20px 16px;transition:background-color .3s,transform .3s var(--ease)}
+.product:nth-child(4n+2),.product:nth-child(4n+3){background:var(--tone-2)}
+.product:hover{transform:translateY(-3px)}
+.product[hidden]{display:none}
+.product svg{width:140px;height:140px;transition:transform .5s var(--ease)}
+.product:hover svg{transform:translateY(-4px) rotate(-2deg)}
+.product h3{font-size:var(--step-lead);letter-spacing:-0.025em;line-height:1.1}
+.product p{margin-top:8px;font-size:var(--step-small);color:var(--muted);max-width:34ch}
+.p-foot{margin-top:16px;display:flex;align-items:baseline;gap:20px}
+.price{font-weight:600;font-size:var(--step-body)}
+.ask{font-size:var(--step-small);font-weight:600}
+.ask::after{content:"";position:absolute;inset:0;border-radius:24px}
+.shop-note{grid-column:1 / 13;margin-top:32px;font-size:var(--step-small);color:var(--muted)}
+
+/* ============ WAYS ============ */
+.ways{background:var(--mist);padding-top:var(--gap);padding-bottom:var(--gap)}
+.ways-head{grid-column:1 / 6;position:sticky;top:112px;align-self:start}
+.ways-head h2{font-size:var(--step-head);max-width:8ch}
+.ways-head p{margin-top:28px;max-width:30ch;font-size:var(--step-lead);line-height:1.35}
+.ways-list{grid-column:7 / 13;list-style:none;display:flex;flex-direction:column;gap:12px}
+.way{background:var(--bg);border-radius:24px;padding:36px 36px 40px;transition:transform .3s var(--ease)}
+.way:hover{transform:translateX(-6px)}
+.way h3{font-size:clamp(1.75rem,1.2rem + 1.6vw,2.75rem)}
+.way p{margin-top:14px;max-width:44ch}
+.way .tags{margin-top:22px;display:flex;flex-wrap:wrap;gap:8px}
+.way .tags span{background:var(--tone);border-radius:999px;padding:6px 14px;font-size:var(--step-small)}
+
+/* ============ FIT ============ */
+.fit{padding-top:var(--gap);padding-bottom:var(--gap);align-items:center}
+.fit-text{grid-column:1 / 6}
+.fit-text h2{font-size:var(--step-head);max-width:10ch}
+.fit-text > p{margin-top:24px;max-width:40ch}
+.dims{margin-top:36px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.dims label{display:flex;flex-direction:column;gap:8px;font-size:var(--step-small);font-weight:500;color:var(--muted)}
+.dims input{width:100%;min-height:64px;padding:0 18px;border-radius:16px;background:var(--tone);border:0;font-size:var(--step-lead);font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink);transition:background-color .2s}
+.dims input:focus{background:#fff}
+.verdict{margin-top:28px;font-size:var(--step-lead);font-weight:600;letter-spacing:-0.02em;line-height:1.25;min-height:2.6em}
+.fit-text .btn{margin-top:16px}
+.fit-figure{grid-column:7 / 13;background:var(--dark);border-radius:28px;padding:clamp(24px,3vw,44px);color:var(--on-dark)}
+.fit-figure svg{width:100%;height:auto}
+.fit-legend{list-style:none;display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:20px;font-size:var(--step-small);color:var(--on-dark-2)}
+.fit-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:8px}
+
+/* ============ MATERIAL ============ */
+.mat{background:var(--dark);color:var(--on-dark);padding-top:var(--gap);padding-bottom:var(--gap)}
+.mat-head{grid-column:1 / 13;display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap}
+.mat-head h2{font-size:var(--step-head)}
+.mat-head p{max-width:40ch;color:var(--on-dark-2)}
+.mats{grid-column:1 / 13;margin-top:56px;display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:12px}
+.m{border-radius:24px;padding:32px;min-height:360px;display:flex;flex-direction:column;color:var(--ink);transition:transform .35s var(--ease)}
+.m:hover{transform:translateY(-4px)}
+.m h3{font-size:clamp(3rem,2rem + 3vw,5.5rem);letter-spacing:-0.05em}
+.m p{margin-top:14px;max-width:30ch}
+.m dl{margin-top:auto;padding-top:32px;display:grid;grid-template-columns:auto 1fr;gap:6px 20px;font-size:var(--step-small)}
+.m dt{font-weight:600}
+.m1{background:#EDE6DA}.m2{background:var(--mist)}.m3{background:var(--accent)}
+.machines{grid-column:1 / 13;margin-top:12px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.mc{background:var(--dark-2);border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:28px;justify-content:space-between}
+.mc h3{font-size:var(--step-lead);letter-spacing:-0.02em}
+.mc p{margin-top:10px;color:var(--on-dark-2);font-size:var(--step-small);max-width:36ch}
+.mc .vol{font-size:clamp(1.5rem,1rem + 1.2vw,2.25rem);font-weight:600;letter-spacing:-0.03em;white-space:nowrap;color:var(--on-dark)}
+.mc .vol small{display:block;font-size:var(--step-small);font-weight:400;color:var(--on-dark-2);letter-spacing:0}
+
+/* ============ HOW ============ */
+.how{padding-top:var(--gap);padding-bottom:var(--gap)}
+.how h2{grid-column:1 / 13;font-size:var(--step-head);max-width:14ch}
+.steps{grid-column:1 / 13;list-style:none;margin-top:56px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.step{position:relative;padding:28px 28px 32px;border-radius:24px;background:var(--tone);min-height:280px;display:flex;flex-direction:column}
+.step:nth-child(2){background:var(--tone-2)}
+.step:nth-child(3){background:var(--mist)}
+.step:nth-child(4){background:var(--dark);color:var(--on-dark)}
+.step .bar{display:flex;gap:4px;margin-bottom:auto;padding-bottom:40px}
+.step .bar i{height:8px;flex:1;border-radius:4px;background:currentColor;opacity:.16}
+.step .bar i.on{opacity:1}
+.step h3{font-size:var(--step-lead);letter-spacing:-0.025em}
+.step p{margin-top:10px;font-size:var(--step-small);line-height:1.5}
+.step:nth-child(4) p{color:var(--on-dark-2)}
+
+/* ============ URNS ============ */
+.urns{background:var(--tone);padding-top:var(--gap);padding-bottom:var(--gap);align-items:center}
+.urn-art{grid-column:1 / 6;background:var(--bg);border-radius:28px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;padding:8%}
+.urn-art svg{width:100%;height:100%}
+.urns-text{grid-column:7 / 13}
+.urns-text h2{font-size:var(--step-head);max-width:10ch}
+.urns-text > p{margin-top:28px;max-width:44ch;font-size:var(--step-lead);line-height:1.4}
+.urn-list{list-style:none;margin-top:36px;display:flex;flex-direction:column;gap:8px}
+.urn-list li{background:var(--bg);border-radius:18px;padding:18px 22px;display:grid;grid-template-columns:1fr auto;gap:4px 16px;align-items:baseline}
+.urn-list b{font-weight:600}
+.urn-list span{font-size:var(--step-small);color:var(--muted);grid-column:1}
+.urn-list em{font-style:normal;font-weight:600;grid-column:2;grid-row:1}
+.urn-actions{margin-top:32px;display:flex;flex-wrap:wrap;gap:12px}
+.btn-soft{background:var(--bg);color:var(--ink)}
+.btn-soft:hover{background:#fff}
+
+/* ============ FAQ ============ */
+.faq{padding-top:var(--gap);padding-bottom:var(--gap)}
+.faq h2{grid-column:1 / 5;font-size:var(--step-head);align-self:start;position:sticky;top:112px;max-width:7ch}
+.faq-list{grid-column:6 / 13;display:flex;flex-direction:column;gap:8px}
+.faq details{background:var(--tone);border-radius:20px;transition:background-color .25s}
+.faq details[open]{background:var(--tone-2)}
+.faq summary{list-style:none;cursor:pointer;padding:22px 26px;display:flex;justify-content:space-between;gap:20px;font-weight:600;font-size:var(--step-body)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-weight:400;font-size:1.5rem;line-height:1;transition:transform .3s var(--ease)}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{padding:0 26px 24px;max-width:60ch}
+
+/* ============ CONTACT ============ */
+.contact{background:var(--dark);color:var(--on-dark);padding-top:var(--gap);padding-bottom:var(--gap)}
+.contact h2{grid-column:1 / 13;font-size:var(--step-display);letter-spacing:-0.05em;line-height:.92;max-width:12ch}
+.contact-mail{grid-column:1 / 13;margin-top:48px;display:inline-block;font-size:clamp(1.75rem,1rem + 3.6vw,4.5rem);font-weight:500;letter-spacing:-0.04em;color:var(--accent);text-decoration:none;justify-self:start;transition:color .3s}
+.contact-mail:hover{color:var(--on-dark)}
+.contact-cols{grid-column:1 / 13;margin-top:72px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.cc{background:var(--dark-2);border-radius:24px;padding:28px}
+.cc h3{font-size:var(--step-body);letter-spacing:-0.01em}
+.cc p,.cc li{margin-top:10px;color:var(--on-dark-2);font-size:var(--step-small)}
+.cc ul{list-style:none}
+
+/* ============ FOOTER ============ */
+.foot{background:var(--dark);color:var(--on-dark-2);padding-bottom:28px;overflow:hidden}
+.foot-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;padding-top:32px;font-size:var(--step-small)}
+.foot-row ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px 28px}
+.foot-row a{text-decoration:none}
+.foot-row a:hover{color:var(--on-dark)}
+.foot-name{margin-top:40px;color:var(--on-dark);font-weight:700;letter-spacing:-0.06em;line-height:.8;white-space:nowrap;font-size:13.6vw}
+
+/* ============ MOTION ============ */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:var(--d,0ms)}
+.rv.in{opacity:1;transform:none}
+.no-js .rv{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .rv{opacity:1;transform:none;transition:none}
+  *{transition-duration:0s !important}
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1100px){
+  .hero{min-height:0}
+  .hero-text,.printer{grid-column:1 / 13}
+  .printer{margin-top:48px;min-height:540px}
+  .ways-head,.ways-list,.fit-text,.fit-figure,.urn-art,.urns-text,.faq h2,.faq-list{grid-column:1 / 13}
+  .ways-head,.faq h2{position:static}
+  .ways-list,.fit-figure,.urns-text,.faq-list{margin-top:48px}
+  .faq h2{max-width:none}
+  .urn-art{max-width:560px;width:100%}
+  .mats{grid-template-columns:1fr 1fr}
+  .machines{grid-template-columns:1fr}
+  .mc{flex-direction:row;align-items:flex-end;flex-wrap:wrap}
+  .m1{grid-column:1 / 3}
+  .steps{grid-template-columns:1fr 1fr}
+  .products{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .nav ul{display:none}
+  .nav{height:64px}
+  .nav .btn{padding:0 16px}
+  .brand{font-size:1.125rem}
+  .hero{padding-top:40px}
+  .hero h1{font-size:clamp(3rem,15vw,4.5rem)}
+  .hero-actions .btn{flex:1 1 100%}
+  .hero-facts{display:grid;grid-template-columns:1fr 1fr;gap:16px 28px}
+  .printer{min-height:480px;border-radius:22px}
+  .p-hint{display:none}
+  .product{grid-template-columns:96px 1fr;gap:16px;padding:16px 20px 18px 10px;border-radius:20px}
+  .product svg{width:96px;height:96px}
+  .mats,.machines{grid-template-columns:1fr}
+  .m1{grid-column:auto}
+  .m{min-height:300px}
+  .mc{grid-template-columns:1fr}
+  .mc .vol{text-align:left}
+  .steps{grid-template-columns:1fr}
+  .step{min-height:0}
+  .step .bar{padding-bottom:28px}
+  .dims input{min-height:56px;padding:0 12px}
+  .contact-cols{grid-template-columns:1fr}
+  .way{padding:28px 24px 30px}
+}
+</style>
+</head>
+<body class="no-js">
+
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <defs>
+    <pattern id="layers" width="8" height="6" patternUnits="userSpaceOnUse">
+      <rect width="8" height="2" y="4" fill="#000" fill-opacity=".1"/>
+    </pattern>
+  </defs>
+</svg>
+
+<nav class="nav wrap" aria-label="Hauptnavigation">
+  <a class="brand" href="#top" aria-label="Make3D Studio, zum Seitenanfang">
+    <svg class="brand-mark" viewBox="0 0 26 26" aria-hidden="true"><rect y="20" width="26" height="6" rx="2" fill="#C7B2EC"/><rect x="3" y="13" width="20" height="6" rx="2" fill="#C7B2EC" opacity=".75"/><rect x="6" y="6" width="14" height="6" rx="2" fill="#C7B2EC" opacity=".5"/></svg>
+    Make3D Studio
+  </a>
+  <ul>
+    <li><a href="#schaufenster">Schaufenster</a></li>
+    <li><a href="#leistungen">Leistungen</a></li>
+    <li><a href="#material">Material</a></li>
+    <li><a href="#erinnerung">Urnen</a></li>
+  </ul>
+  <a class="btn btn-light" href="#kontakt">Anfrage stellen</a>
+</nav>
+
+<header class="hero wrap" id="top">
+  <div class="hero-text">
+    <h1 class="rv">Alles, was sich drucken lässt.</h1>
+    <p class="lede rv" style="--d:90ms">3D-Druck und Konstruktion aus Neumarkt i.d.OPf. – Ersatzteile, Prototypen, Geschenke und Erinnerungsstücke, vom Einzelstück bis zur Kleinserie.</p>
+    <div class="hero-actions rv" style="--d:170ms">
+      <a class="btn btn-light" href="#kontakt">Anfrage stellen <span class="arr" aria-hidden="true">→</span></a>
+      <a class="btn btn-ghost" href="#schaufenster">Zum Schaufenster</a>
+    </div>
+    <p class="hero-facts rv" style="--d:250ms"><span><b>0,2 mm</b>Schichthöhe</span><span><b>330 mm</b>größter Bauraum</span><span><b>3</b>Drucker</span><span><b>3</b>Materialien</span></p>
+  </div>
+
+  <div class="printer rv" style="--d:120ms" id="printer">
+    <canvas id="gl" aria-label="3D-Vorschau: ein Objekt wird Schicht für Schicht gedruckt. Ziehen zum Drehen." role="img"></canvas>
+    <div class="p-top">
+      <div class="p-status" aria-live="polite"><b id="p-name">Vase „Welle“</b><span id="p-layer">Schicht 0 von 80</span><div class="p-bar"><i id="p-bar"></i></div></div>
+      <div class="p-hint">Ziehen zum Drehen</div>
+    </div>
+    <div class="p-controls">
+      <div class="seg" role="group" aria-label="Objekt wählen">
+        <button aria-pressed="true" data-obj="vase">Vase</button>
+        <button aria-pressed="false" data-obj="urn">Urne</button>
+        <button aria-pressed="false" data-obj="gear">Zahnrad</button>
+        <button aria-pressed="false" data-obj="piece">Figur</button>
+      </div>
+      <div class="swatches" role="group" aria-label="Filamentfarbe wählen">
+        <span>Farbe</span>
+        <button class="sw" aria-pressed="true" data-col="#E9E3D3" style="background:#E9E3D3" aria-label="Elfenbein"></button>
+        <button class="sw" aria-pressed="false" data-col="#B7A6CF" style="background:#B7A6CF" aria-label="Flieder"></button>
+        <button class="sw" aria-pressed="false" data-col="#9E9C95" style="background:#9E9C95" aria-label="Stein"></button>
+        <button class="sw" aria-pressed="false" data-col="#C7B08A" style="background:#C7B08A" aria-label="Sand"></button>
+        <button class="sw" aria-pressed="false" data-col="#5A635D" style="background:#5A635D" aria-label="Anthrazit"></button>
+      </div>
+    </div>
+    <p class="p-fallback">Hier entsteht eine Vase Schicht für Schicht – dein Browser zeigt die 3D-Vorschau leider nicht an.</p>
   </div>
 </header>
 
-<main>
-
-  <section class="hero">
-    <div class="wrap hero-inner">
-      <p class="eyebrow">3D-Druck &amp; Konstruktion in Neumarkt i.d.OPf.</p>
-      <h1>Aus deiner Idee wird ein gedrucktes Teil.</h1>
-      <p class="hero-lead">
-        Egal ob du selbst konstruiert hast, ein Modell im Internet gefunden hast
-        oder nur eine Idee im Kopf – wir setzen sie in 3D um und drucken sie in
-        hoher Qualität. Für Privatpersonen, Handwerker und Unternehmen.
-      </p>
-      <div class="hero-actions">
-        <a href="#anfrage" class="btn btn-primary">Anfrage stellen</a>
-        <a href="#leistungen" class="btn btn-ghost">Leistungen ansehen</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="who">
-    <div class="wrap who-grid">
-      <div class="who-card">
-        <h3>Du hast eine Idee</h3>
-        <p>Du weißt, was du brauchst, aber nicht, wie man es baut. Wir konstruieren
-          das passende 3D-Modell für dich – von der Skizze bis zur fertigen Datei.</p>
-      </div>
-      <div class="who-card">
-        <h3>Du hast eine Datei gefunden</h3>
-        <p>Ein Modell aus dem Internet, aber keinen Drucker? Schick uns die Datei,
-          wir prüfen sie und drucken sie passend zu deinem Vorhaben.</p>
-      </div>
-      <div class="who-card">
-        <h3>Du hast selbst konstruiert</h3>
-        <p>Du hast bereits ein fertiges CAD-Modell, aber keinen eigenen 3D-Drucker?
-          Wir übernehmen den Druck in dem Material, das du brauchst.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="leistungen" class="section">
-    <div class="wrap">
-      <h2 class="section-title">Leistungen</h2>
-      <p class="section-lead">Vom ersten Gedanken bis zum fertigen Teil in der Hand.</p>
-      <div class="services-grid">
-        <div class="service">
-          <span class="service-num">01</span>
-          <h3>3D-Modellierung</h3>
-          <p>Konstruktion nach deiner Idee, einer Skizze, einem Foto oder einer
-            groben Beschreibung. Du bekommst ein druckfertiges 3D-Modell.</p>
-        </div>
-        <div class="service">
-          <span class="service-num">02</span>
-          <h3>3D-Druck nach Datei</h3>
-          <p>Du hast bereits ein Modell (STL, STEP, OBJ) – wir prüfen es auf
-            Druckbarkeit und fertigen es in deinem Wunschmaterial.</p>
-        </div>
-        <div class="service">
-          <span class="service-num">03</span>
-          <h3>Prototypen &amp; Ersatzteile</h3>
-          <p>Einzelstücke zum Testen einer Idee oder als Ersatz für ein
-            kaputtes oder nicht mehr erhältliches Teil.</p>
-        </div>
-        <div class="service">
-          <span class="service-num">04</span>
-          <h3>Kleinserien</h3>
-          <p>Mehrere gleiche oder ähnliche Teile in einem Durchgang – für
-            kleine Projekte, Events oder erste Produktchargen.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="materialien" class="section section-alt">
-    <div class="wrap">
-      <h2 class="section-title">Materialien &amp; Drucker</h2>
-      <p class="section-lead">Wir drucken auf Bambu Lab H2C und X2D – für kleine Details ebenso wie größere Teile.</p>
-
-      <div class="materials-grid">
-        <div class="material">
-          <h3>PLA</h3>
-          <p>Der Allrounder für Modelle, Deko, Prototypen und alles, was nicht
-            dauerhaft hoher Belastung oder Hitze ausgesetzt ist.</p>
-        </div>
-        <div class="material">
-          <h3>PETG</h3>
-          <p>Robuster und etwas hitzebeständiger als PLA. Gut geeignet für
-            Halterungen, Gehäuse und Teile mit mehr mechanischer Belastung.</p>
-        </div>
-        <div class="material">
-          <h3>ABS</h3>
-          <p>Stabil, schlagfest und hitzebeständiger. Die richtige Wahl für
-            funktionale Teile und Anwendungen mit höheren Ansprüchen.</p>
-        </div>
-      </div>
-
-      <div class="printers-grid">
-        <div class="printer">
-          <h4>Bambu Lab X2D</h4>
-          <p>Präziser Druck im kompakten Format. Bauraum bis 256 × 256 × 260&nbsp;mm.
-            Ideal für Details und filigrane Modelle.</p>
-        </div>
-        <div class="printer">
-          <h4>Bambu Lab H2C</h4>
-          <p>Für größere Teile. Bauraum bis 330 × 320 × 325&nbsp;mm, auch mit
-            mehreren Farben oder Materialien in einem Druck.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="ablauf" class="section">
-    <div class="wrap">
-      <h2 class="section-title">So läuft eine Anfrage ab</h2>
-      <ol class="steps">
-        <li>
-          <span class="step-num">1</span>
-          <div>
-            <h3>Anfrage</h3>
-            <p>Du beschreibst dein Vorhaben oder schickst eine vorhandene
-              Datei. Je mehr Infos, desto genauer das Angebot.</p>
-          </div>
-        </li>
-        <li>
-          <span class="step-num">2</span>
-          <div>
-            <h3>Angebot</h3>
-            <p>Wir prüfen die Machbarkeit und melden uns mit Preis und
-              Zeitrahmen zurück – unverbindlich.</p>
-          </div>
-        </li>
-        <li>
-          <span class="step-num">3</span>
-          <div>
-            <h3>Fertigung</h3>
-            <p>Nach deiner Bestätigung wird modelliert und gedruckt, mit
-              kurzer Rückmeldung bei Rückfragen.</p>
-          </div>
-        </li>
-        <li>
-          <span class="step-num">4</span>
-          <div>
-            <h3>Übergabe</h3>
-            <p>Abholung in Neumarkt i.d.OPf. oder Versand – wie es für dich
-              passt.</p>
-          </div>
-        </li>
-      </ol>
-    </div>
-  </section>
-
-  <section id="galerie" class="section section-alt">
-    <div class="wrap">
-      <h2 class="section-title">Galerie</h2>
-      <p class="section-lead">Eine Auswahl bisheriger Drucke folgt hier in Kürze.</p>
-      <div class="gallery-grid">
-        <div class="gallery-placeholder"></div>
-        <div class="gallery-placeholder"></div>
-        <div class="gallery-placeholder"></div>
-        <div class="gallery-placeholder"></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="anfrage" class="section section-cta">
-    <div class="wrap">
-      <h2 class="section-title">Anfrage stellen</h2>
-      <p class="section-lead">
-        Beschreib dein Vorhaben so genau wie möglich. Preise nennen wir nach
-        Prüfung deiner Anfrage – jede Anfrage ist unverbindlich.
-      </p>
-
-      <form class="request-form" action="mailto:info@make3dstudio.de" method="POST" enctype="text/plain">
-        <div class="form-row">
-          <label for="name">Name</label>
-          <input type="text" id="name" name="Name" required>
-        </div>
-        <div class="form-row">
-          <label for="email">E-Mail</label>
-          <input type="email" id="email" name="E-Mail" required>
-        </div>
-        <div class="form-row">
-          <label for="telefon">Telefon (optional)</label>
-          <input type="tel" id="telefon" name="Telefon">
-        </div>
-        <div class="form-row">
-          <label for="beschreibung">Was soll entstehen?</label>
-          <textarea id="beschreibung" name="Beschreibung" rows="5" required
-            placeholder="Beschreibe dein Vorhaben: eigene Idee, gefundene Datei, vorhandenes Modell, gewünschtes Material, Stückzahl …"></textarea>
-        </div>
-        <p class="form-note">
-          Hast du bereits eine Datei (STL, STEP, OBJ)? Schick sie uns einfach
-          direkt per E-Mail an
-          <a href="mailto:info@make3dstudio.de">info@make3dstudio.de</a> zusammen
-          mit deiner Beschreibung.
-        </p>
-        <button type="submit" class="btn btn-primary">Anfrage senden</button>
-      </form>
-    </div>
-  </section>
-
-</main>
-
-<footer class="site-footer">
-  <div class="wrap footer-inner">
-    <img src="/assets/logo.png" alt="Make3D Studio" class="footer-logo">
-    <nav class="footer-nav">
-      <a href="/impressum/">Impressum</a>
-      <a href="/datenschutz/">Datenschutz</a>
-      <a href="mailto:info@make3dstudio.de">info@make3dstudio.de</a>
-    </nav>
-    <p class="footer-copy">© <span id="year"></span> Make3D Studio, Neumarkt i.d.OPf.</p>
+<section class="shop wrap grid" id="schaufenster" aria-labelledby="shop-h">
+  <div class="shop-head">
+    <h2 id="shop-h" class="rv">Das Schaufenster</h2>
+    <p class="rv" style="--d:80ms">Eine Auswahl dessen, was wir regelmäßig drucken – jedes Stück für dich gefertigt, in Farbe, Größe und Material nach Wunsch. Die Preise sind Richtwerte, das genaue Angebot folgt auf deine Anfrage.</p>
   </div>
+  <div class="tabs rv" style="--d:120ms" role="group" aria-label="Kategorien filtern">
+    <button class="tab" aria-pressed="true" data-f="alle">Alles</button>
+    <button class="tab" aria-pressed="false" data-f="haushalt">Haushalt &amp; Ersatzteile</button>
+    <button class="tab" aria-pressed="false" data-f="deko">Deko &amp; Geschenke</button>
+    <button class="tab" aria-pressed="false" data-f="technik">Technik &amp; Prototypen</button>
+    <button class="tab" aria-pressed="false" data-f="erinnerung">Erinnerung</button>
+  </div>
+  <ul class="products" id="products"></ul>
+  <p class="shop-note">Etwas anderes im Kopf? Fast alles, was in den Bauraum passt, lässt sich drucken. <a class="link" href="#passt-es">Prüf hier, ob dein Teil hineinpasst.</a></p>
+</section>
+
+<section class="ways" id="leistungen" aria-labelledby="ways-h">
+  <div class="wrap grid">
+    <div class="ways-head">
+      <h2 id="ways-h" class="rv">Womit du auch kommst</h2>
+      <p class="rv" style="--d:80ms">Einer Idee, einer Datei oder einem fertigen Modell – am Ende hältst du ein gedrucktes Teil in der Hand.</p>
+    </div>
+    <ul class="ways-list">
+      <li class="way rv">
+        <h3>Du hast eine Idee</h3>
+        <p>Skizze, Foto oder ein paar Sätze genügen. Wir konstruieren das 3D-Modell, schicken dir eine Vorschau zur Freigabe – und die fertige Datei gehört dir.</p>
+        <div class="tags"><span>3D-Modellierung</span><span>Nachkonstruktion</span><span>Vorschau</span></div>
+      </li>
+      <li class="way rv">
+        <h3>Du hast eine Datei</h3>
+        <p>Gefunden auf Printables, Thingiverse oder anderswo? Wir prüfen Wandstärken und Druckbarkeit und drucken in Material und Farbe passend zum Einsatz.</p>
+        <div class="tags"><span>STL</span><span>3MF</span><span>STEP</span><span>OBJ</span></div>
+      </li>
+      <li class="way rv">
+        <h3>Du hast selbst konstruiert</h3>
+        <p>Dein CAD-Modell, unser Drucker: Prototypen und Testteile in PLA, PETG oder ABS – auch mehrfarbig oder mit Stützmaterial.</p>
+        <div class="tags"><span>Prototypen</span><span>Testteile</span><span>Mehrfarbig</span></div>
+      </li>
+      <li class="way rv">
+        <h3>Du brauchst mehrere</h3>
+        <p>Kleinserien von fünf bis einigen hundert Stück, in gleichbleibender Qualität – für Vereine, Events, Handwerk und erste Produktchargen.</p>
+        <div class="tags"><span>Kleinserie</span><span>Staffelpreise</span><span>Rechnung</span></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="fit wrap grid" id="passt-es" aria-labelledby="fit-h">
+  <div class="fit-text">
+    <h2 id="fit-h" class="rv">Passt es in den Drucker?</h2>
+    <p class="rv" style="--d:80ms">Gib die Maße deines Teils ein. Wir zeigen dir, in welchen unserer Drucker es am Stück passt – oder in wie viele Teile wir es zerlegen und wieder verbinden.</p>
+    <form class="dims rv" style="--d:140ms" id="dims" onsubmit="return false">
+      <label>Länge in mm<input type="number" inputmode="numeric" min="1" max="2000" value="180" id="dl"></label>
+      <label>Breite in mm<input type="number" inputmode="numeric" min="1" max="2000" value="120" id="dw"></label>
+      <label>Höhe in mm<input type="number" inputmode="numeric" min="1" max="2000" value="90" id="dh"></label>
+    </form>
+    <p class="verdict" id="verdict" aria-live="polite">Passt in alle drei Drucker – am Stück.</p>
+    <a class="btn" id="fit-mail" href="mailto:info@make3dstudio.de">Mit diesen Maßen anfragen <span class="arr" aria-hidden="true">→</span></a>
+  </div>
+  <figure class="fit-figure rv" style="--d:120ms">
+    <svg viewBox="0 0 440 400" role="img" aria-label="Vorderansicht der Bauräume mit deinem Teil"><g id="fit-g"></g></svg>
+    <ul class="fit-legend">
+      <li><i style="background:#3A2B4D"></i>H2C &amp; A2L · 330 × 320 × 325 mm</li>
+      <li><i style="background:#5E4A7A"></i>X2D · 256 × 256 × 260 mm</li>
+      <li><i style="background:#C7B2EC"></i>Dein Teil, von vorn</li>
+    </ul>
+  </figure>
+</section>
+
+<section class="mat" id="material" aria-labelledby="mat-h">
+  <div class="wrap grid">
+    <div class="mat-head">
+      <h2 id="mat-h" class="rv">Material &amp; Maschinen</h2>
+      <p class="rv" style="--d:80ms">Drei Materialien, drei Drucker – damit decken wir vom feinen Geschenk bis zum belastbaren Funktionsteil fast alles ab.</p>
+    </div>
+    <div class="mats">
+      <article class="m m1 rv">
+        <h3>PLA</h3>
+        <p>Der Allrounder für Deko, Modelle, Geschenke und Prototypen. Große Farbauswahl, feine Oberflächen.</p>
+        <dl><dt>Wärme</dt><dd>bis ca. 55 °C</dd><dt>Ideal für</dt><dd>Deko, Modelle, Urnen</dd></dl>
+      </article>
+      <article class="m m2 rv" style="--d:80ms">
+        <h3>PETG</h3>
+        <p>Zäher und robuster – für Halterungen, Gehäuse und den Außenbereich.</p>
+        <dl><dt>Wärme</dt><dd>bis ca. 75 °C</dd><dt>Ideal für</dt><dd>Halter, Gehäuse</dd></dl>
+      </article>
+      <article class="m m3 rv" style="--d:160ms">
+        <h3>ABS</h3>
+        <p>Schlagfest und hitzebeständig, für Funktionsteile mit Anspruch.</p>
+        <dl><dt>Wärme</dt><dd>bis ca. 95 °C</dd><dt>Ideal für</dt><dd>Technik, Kfz-Teile</dd></dl>
+      </article>
+    </div>
+    <div class="machines">
+      <article class="mc rv">
+        <div><h3>Bambu Lab X2D</h3><p>Präzise und schnell – ideal für feine Details und filigrane Modelle.</p></div>
+        <p class="vol num">256 × 256 × 260<small>mm Bauraum</small></p>
+      </article>
+      <article class="mc rv" style="--d:80ms">
+        <div><h3>Bambu Lab H2C</h3><p>Für große Teile, auch mehrfarbig oder mit zwei Materialien in einem Druck.</p></div>
+        <p class="vol num">330 × 320 × 325<small>mm Bauraum</small></p>
+      </article>
+      <article class="mc rv" style="--d:160ms">
+        <div><h3>Bambu Lab A2L</h3><p>Offener Großformat-Drucker – ideal für große Teile, Deko und Kleinserien in PLA und PETG.</p></div>
+        <p class="vol num">330 × 320 × 325<small>mm Bauraum</small></p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="how wrap grid" id="ablauf" aria-labelledby="how-h">
+  <h2 id="how-h" class="rv">So einfach geht’s</h2>
+  <ol class="steps">
+    <li class="step rv"><div class="bar" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div><h3>Anfrage</h3><p>Du beschreibst dein Vorhaben oder schickst die Datei – mit Fotos, Maßen und Wunschmaterial.</p></li>
+    <li class="step rv" style="--d:80ms"><div class="bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i></div><h3>Angebot</h3><p>Wir prüfen die Machbarkeit und melden uns mit Preis und Zeitrahmen. Kostenlos und unverbindlich.</p></li>
+    <li class="step rv" style="--d:160ms"><div class="bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div><h3>Fertigung</h3><p>Nach deinem Okay wird modelliert und gedruckt – bei Fragen melden wir uns kurz.</p></li>
+    <li class="step rv" style="--d:240ms"><div class="bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div><h3>Übergabe</h3><p>Abholung in Neumarkt i.d.OPf. oder Versand – wie es dir am besten passt.</p></li>
+  </ol>
+</section>
+
+<section class="urns wrap grid" id="erinnerung" aria-labelledby="urn-h">
+  <div class="urn-art rv">
+    <svg viewBox="0 0 400 400" role="img" aria-label="Zeichnung einer schlichten Urne mit sichtbaren Druckschichten und Namensgravur">
+      <defs><clipPath id="urnclip"><path d="M126 344 L274 344 C280 330 312 296 312 240 C312 186 282 152 258 140 L258 118 L272 110 L272 96 L216 96 C216 76 184 76 184 96 L128 96 L128 110 L142 118 L142 140 C118 152 88 186 88 240 C88 296 120 330 126 344Z"/></clipPath></defs>
+      <ellipse cx="200" cy="350" rx="140" ry="10" fill="#1C1426" fill-opacity=".08"/>
+      <path d="M126 344 L274 344 C280 330 312 296 312 240 C312 186 282 152 258 140 L258 118 L272 110 L272 96 L216 96 C216 76 184 76 184 96 L128 96 L128 110 L142 118 L142 140 C118 152 88 186 88 240 C88 296 120 330 126 344Z" fill="#B7A6CF"/>
+      <rect width="400" height="400" fill="url(#layers)" clip-path="url(#urnclip)"/>
+      <text x="200" y="236" text-anchor="middle" font-family="Geist, sans-serif" font-size="22" font-weight="600" fill="#1C1426" fill-opacity=".72" letter-spacing="1">Anna</text>
+      <text x="200" y="262" text-anchor="middle" font-family="Geist, sans-serif" font-size="14" fill="#1C1426" fill-opacity=".6">1941 – 2026</text>
+    </svg>
+  </div>
+  <div class="urns-text">
+    <h2 id="urn-h" class="rv">Urnen &amp; Erinnerung</h2>
+    <p class="rv" style="--d:80ms">Eine Urne, die zum Menschen passt: schlicht, mit Namen, einem Motiv aus seinem Leben oder in seiner Lieblingsfarbe. Wir entwerfen in Ruhe gemeinsam mit dir.</p>
+    <ul class="urn-list rv" style="--d:140ms">
+      <li><b>Urne nach Wunsch</b><span>Gravur, Motiv oder Relief, Abstimmung mit dem Bestatter möglich</span><em>ab 149 €</em></li>
+      <li><b>Tierurne</b><span>Mit Namen, Pfote oder Silhouette, in passender Größe</span><em>ab 79 €</em></li>
+      <li><b>Andenken</b><span>Lithophanie mit Foto, Handschrift als Relief, kleine Erinnerungsdosen</span><em>ab 29 €</em></li>
+    </ul>
+    <div class="urn-actions rv" style="--d:200ms">
+      <a class="btn" href="mailto:info@make3dstudio.de?subject=Anfrage%20Urne%20%2F%20Erinnerungsst%C3%BCck&body=Hallo%20Make3D%20Studio%2C%0A%0Aich%20interessiere%20mich%20f%C3%BCr%3A%20%0A%0AW%C3%BCnsche%20(Name%2C%20Motiv%2C%20Farbe%2C%20Gr%C3%B6%C3%9Fe)%3A%20%0A%0AViele%20Gr%C3%BC%C3%9Fe">Behutsam anfragen</a>
+      <button class="btn btn-soft" type="button" id="urn-3d">Urne in 3D ansehen</button>
+    </div>
+  </div>
+</section>
+
+<section class="faq wrap grid" id="fragen" aria-labelledby="faq-h">
+  <h2 id="faq-h" class="rv">Gute Fragen</h2>
+  <div class="faq-list rv" style="--d:80ms">
+    <details open><summary>Was kostet ein Druck?</summary><p>Das hängt von Größe, Material und Druckzeit ab. Kleine Teile beginnen bei etwa 9 €. Du bekommst immer erst ein Angebot, bevor wir loslegen.</p></details>
+    <details><summary>Wie schnell geht das?</summary><p>Einfache Drucke sind oft in wenigen Tagen fertig. Bei Konstruktionen oder Kleinserien nennen wir dir den Zeitrahmen im Angebot.</p></details>
+    <details><summary>Welche Dateien nehmt ihr?</summary><p>STL, 3MF, STEP und OBJ. Hast du keine Datei, reichen ein Foto, eine Skizze und die wichtigsten Maße.</p></details>
+    <details><summary>Wie groß darf ein Teil sein?</summary><p>Am Stück bis 330 × 320 × 325 mm. Größeres teilen wir in mehrere Stücke, die verklebt oder verschraubt werden.</p></details>
+    <details><summary>Könnt ihr ein kaputtes Teil nachbauen?</summary><p>Meist ja. Schick uns Fotos und, wenn möglich, das Originalteil oder seine Maße – wir konstruieren es nach.</p></details>
+    <details><summary>Welche Farben gibt es?</summary><p>Eine große Auswahl in PLA und PETG, von Naturtönen bis zu kräftigen Farben. Mehrfarbige Drucke sind auf dem H2C möglich.</p></details>
+    <details><summary>Muss ich nach Neumarkt kommen?</summary><p>Nein. Du kannst abholen oder wir schicken dir dein Teil per Post.</p></details>
+    <details><summary>Druckt ihr auch für Firmen?</summary><p>Ja – Prototypen, Vorrichtungen, Ersatzteile und Kleinserien für Handwerk und Unternehmen, gern mit Rechnung.</p></details>
+  </div>
+</section>
+
+<section class="contact" id="kontakt" aria-labelledby="contact-h">
+  <div class="wrap grid">
+    <h2 id="contact-h" class="rv">Was sollen wir für dich drucken?</h2>
+    <a class="contact-mail rv" style="--d:80ms" href="mailto:info@make3dstudio.de?subject=Anfrage%20an%20Make3D%20Studio&body=Hallo%20Make3D%20Studio%2C%0A%0Adas%20soll%20entstehen%3A%20%0A%0AMa%C3%9Fe%20(ca.)%3A%20%0AMaterial%20%2F%20Farbe%3A%20%0ASt%C3%BCckzahl%3A%20%0AAbholung%20oder%20Versand%3A%20%0A%0AViele%20Gr%C3%BC%C3%9Fe">info@make3dstudio.de →</a>
+    <div class="contact-cols">
+      <div class="cc rv"><h3>Das hilft uns</h3><ul><li>Wofür das Teil gedacht ist</li><li>Fotos oder eine Skizze mit Maßen</li><li>Wunschfarbe, Material, Stückzahl</li></ul></div>
+      <div class="cc rv" style="--d:80ms"><h3>Hast du eine Datei?</h3><p>Hänge STL, 3MF, STEP oder OBJ einfach an deine E-Mail an.</p></div>
+      <div class="cc rv" style="--d:160ms"><h3>Abholung &amp; Versand</h3><p>Abholung in Neumarkt i.d.OPf. oder Versand innerhalb Deutschlands.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot wrap">
+  <div class="foot-row">
+    <ul>
+      <li><a href="#schaufenster">Schaufenster</a></li>
+      <li><a href="#leistungen">Leistungen</a></li>
+      <li><a href="#material">Material</a></li>
+      <li><a href="#erinnerung">Urnen</a></li>
+      <li><a href="#fragen">Fragen</a></li>
+    </ul>
+    <ul>
+      <li>© 2026 Make3D Studio · Neumarkt i.d.OPf.</li>
+      <li><a href="/impressum/">Impressum</a></li>
+      <li><a href="/datenschutz/">Datenschutz</a></li>
+    </ul>
+  </div>
+  <p class="foot-name" aria-hidden="true">Make3D Studio</p>
 </footer>
 
+<script src="/assets/js/three.min.js"></script>
 <script>
-  document.getElementById('year').textContent = new Date().getFullYear();
-  const toggle = document.querySelector('.nav-toggle');
-  const nav = document.querySelector('.main-nav');
-  toggle.addEventListener('click', () => {
-    const open = nav.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', open);
-  });
-  document.querySelectorAll('.main-nav a').forEach(a => {
-    a.addEventListener('click', () => {
-      nav.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
-    });
-  });
-</script>
+document.body.classList.remove('no-js');
+const MAIL='info@make3dstudio.de';
+const mailto=(s,b)=>`mailto:${MAIL}?subject=${encodeURIComponent(s)}&body=${encodeURIComponent(b)}`;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+/* ---------------- 3D printer ---------------- */
+const Printer=(()=>{
+  const box=document.getElementById('printer'),canvas=document.getElementById('gl');
+  const fail=()=>{box.classList.add('no-gl');return {set(){},color(){}};};
+  if(!window.THREE)return fail();
+  let R;try{R=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});}catch(e){return fail();}
+  R.localClippingEnabled=true;R.setPixelRatio(Math.min(2,devicePixelRatio||1));
+  R.outputEncoding=THREE.sRGBEncoding;
+  const scene=new THREE.Scene();
+  const cam=new THREE.PerspectiveCamera(30,1,.1,100);
+  scene.add(new THREE.HemisphereLight(0xffffff,0x281D35,.7));
+  const key=new THREE.DirectionalLight(0xffffff,1.05);key.position.set(3,5,4);scene.add(key);
+  const rim=new THREE.DirectionalLight(0xC7B2EC,.7);rim.position.set(-4,2,-3);scene.add(rim);
+  const plate=new THREE.Mesh(new THREE.CylinderGeometry(1.45,1.45,.06,72),new THREE.MeshStandardMaterial({color:new THREE.Color(0x2E2240).convertSRGBToLinear(),roughness:.8}));
+  plate.position.y=-.03;scene.add(plate);
+  const clip=new THREE.Plane(new THREE.Vector3(0,-1,0),0);
+  const mA=new THREE.MeshStandardMaterial({color:0xE9E3D3,roughness:.55,side:THREE.DoubleSide,clippingPlanes:[clip]});
+  const mB=mA.clone();mB.clippingPlanes=[clip];
+  const setColor=hex=>{const c=new THREE.Color(hex).convertSRGBToLinear();mA.color.copy(c);mB.color.copy(c).multiplyScalar(.88);};
+  const noz=new THREE.Group();
+  const tip=new THREE.Mesh(new THREE.ConeGeometry(.06,.12,24),new THREE.MeshStandardMaterial({color:0xC9CCC6,roughness:.35,metalness:.6}));tip.rotation.x=Math.PI;tip.position.y=.06;
+  const body=new THREE.Mesh(new THREE.BoxGeometry(.32,.22,.32),new THREE.MeshStandardMaterial({color:0x2E3A56,roughness:.6}));body.position.y=.23;
+  noz.add(tip,body);scene.add(noz);
+  const group=new THREE.Group();scene.add(group);
+
+  const H=2,LAYERS=80;
+  const prof={
+    vase:t=>.36+.3*Math.sin(Math.PI*(t*.95+.05))-.1*t+(t>.86?(t-.86)*1.1:0),
+    urn:t=>t<.05?.5:t<.08?.42:t<.72?.4+.42*Math.sin(Math.PI*(t-.06)/.72*.92+.12):t<.8?.36:t<.83?.6:t<.96?.52*Math.sqrt(Math.max(0,1-((t-.83)/.13)**2))+.08:.09,
+    piece:t=>{const y=t*H;if(t<.06)return .62;if(t<.1)return .5;if(t<.66)return .44-.26*((t-.1)/.56)**.8;if(t<.7)return .34;if(t<.72)return .2;const yc=1.66,r=.3;return Math.max(.0,Math.sqrt(Math.max(0,r*r-(y-yc)**2)));}
+  };
+  const names={vase:'Vase „Welle“',urn:'Urne nach Wunsch',gear:'Zahnrad als Ersatzteil',piece:'Spielfigur'};
+  let topH=H;
+  function clear(){while(group.children.length){const m=group.children.pop();m.geometry.dispose();}}
+  function lathe(fn){
+    topH=H;const n=LAYERS,lh=H/n;
+    for(let i=0;i<n;i++){const y0=i*lh,y1=(i+1)*lh;
+      const g=new THREE.LatheGeometry([new THREE.Vector2(fn(y0/H),y0),new THREE.Vector2(fn(y1/H),y1)],72);
+      group.add(new THREE.Mesh(g,i%2?mB:mA));}
+    const cap=new THREE.Mesh(new THREE.CircleGeometry(fn(0),72),mA);cap.rotation.x=-Math.PI/2;cap.position.y=.001;group.add(cap);
+  }
+  function gearShape(R1,R2,teeth,hole){
+    const s=new THREE.Shape();const n=teeth*4;
+    for(let i=0;i<=n;i++){const a=i/n*Math.PI*2;const r=(i%4<2)?R1:R2;const x=Math.cos(a)*r,y=Math.sin(a)*r;i?s.lineTo(x,y):s.moveTo(x,y);}
+    const h=new THREE.Path();h.absarc(0,0,hole,0,Math.PI*2,true);s.holes.push(h);return s;
+  }
+  function gear(){
+    const lh=.025,g1=gearShape(1.0,.86,22,.3),hub=new THREE.Shape();hub.absarc(0,0,.5,0,Math.PI*2,false);
+    const hh=new THREE.Path();hh.absarc(0,0,.3,0,Math.PI*2,true);hub.holes.push(hh);
+    const L1=20,L2=16;topH=(L1+L2)*lh;
+    for(let i=0;i<L1+L2;i++){const g=new THREE.ExtrudeGeometry(i<L1?g1:hub,{depth:lh,bevelEnabled:false,curveSegments:24});
+      g.rotateX(-Math.PI/2);const m=new THREE.Mesh(g,i%2?mB:mA);m.position.y=i*lh;group.add(m);}
+  }
+  let cur='vase',t0=performance.now(),dur=7000,done=false,rotY=.4,vel=0,drag=false,lastX=0;
+  function build(name){clear();cur=name;if(name==='gear')gear();else lathe(prof[name]);
+    t0=performance.now();done=reduce;noz.position.set(0,0,0);document.getElementById('p-name').textContent=names[name];}
+  function resize(){const w=box.clientWidth,h=box.clientHeight;R.setSize(w,h,false);cam.aspect=w/h;
+    const far=w<520?8.4:7.6;cam.position.set(0,2.3,far);cam.lookAt(0,.8,0);cam.updateProjectionMatrix();}
+  new ResizeObserver(resize).observe(box);resize();
+  canvas.addEventListener('pointerdown',e=>{drag=true;lastX=e.clientX;canvas.setPointerCapture(e.pointerId);});
+  canvas.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-lastX;lastX=e.clientX;rotY+=dx*.01;vel=dx*.0008;});
+  canvas.addEventListener('pointerup',()=>drag=false);
+  let visible=true;new IntersectionObserver(es=>visible=es[0].isIntersecting).observe(box);
+  const pl=document.getElementById('p-layer'),pb=document.getElementById('p-bar');
+  function frame(now){
+    requestAnimationFrame(frame);if(!visible)return;
+    const p=done?1:Math.min(1,(now-t0)/dur);
+    const h=p*topH;clip.constant=p>=1?99:h;
+    const total=cur==='gear'?36:LAYERS,layer=Math.min(total,Math.ceil(p*total));
+    pl.textContent=p<1?`Schicht ${layer} von ${total} · 0,2 mm`:`Fertig · ${total} Schichten`;pb.style.width=(p*100)+'%';
+    if(p>=1)done=true;
+    const a=now*.012;const r=cur==='gear'?(h<.5?.93:.45):prof[cur](Math.min(1,h/H));
+    if(p<1){noz.position.set(Math.cos(a)*r,h+.01,Math.sin(a)*r);}
+    else{noz.position.y+=(topH+.9-noz.position.y)*.05;noz.position.x*=.95;noz.position.z*=.95;}
+    noz.visible=p<1||noz.position.y<topH+.8;
+    if(!drag){vel*=.95;rotY+=(reduce?0:.0035)+vel;}
+    group.rotation.y=rotY;
+    R.render(scene,cam);
+  }
+  setColor('#E9E3D3');build('vase');requestAnimationFrame(frame);
+  return {set:build,color:setColor};
+})();
+document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));Printer.set(b.dataset.obj);}));
+document.querySelectorAll('.sw').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.sw').forEach(x=>x.setAttribute('aria-pressed',x===b));Printer.color(b.dataset.col);}));
+document.getElementById('urn-3d').addEventListener('click',()=>{
+  document.querySelector('.sw[aria-label="Flieder"]').click();document.querySelector('.seg [data-obj="urn"]').click();
+  document.getElementById('top').scrollIntoView({behavior:reduce?'auto':'smooth'});});
+
+/* ---------------- Schaufenster ---------------- */
+const P=[
+ {n:'Ersatzteil nach Maß',d:'Clip, Knopf, Halter oder Abdeckung – nachkonstruiert nach Foto oder Original.',p:'ab 9 €',c:'haushalt',col:'#9E9C95',
+  s:'M60 180 L80 180 L80 82 C80 58 120 58 120 82 L120 112 L142 112 L142 80 C142 36 58 36 58 80Z'},
+ {n:'Organizer nach Maß',d:'Fächer genau auf deine Schublade oder Werkbank abgestimmt.',p:'ab 14 €',c:'haushalt',col:'#B7A6CF',
+  s:'M30 180 L170 180 L170 100 L138 100 L138 132 L120 132 L120 78 L80 78 L80 132 L62 132 L62 110 L30 110Z'},
+ {n:'Vase „Welle“',d:'Spiralvase mit sichtbaren Druckschichten, in Natur- und Steintönen.',p:'ab 24 €',c:'deko',col:'#E9E3D3',
+  s:'M72 180 L128 180 C134 150 150 122 140 92 C132 70 118 62 122 30 L78 30 C82 62 68 70 60 92 C50 122 66 150 72 180Z'},
+ {n:'Lithophanie-Leuchte',d:'Dein Foto erscheint im Licht – als Lampe oder Fensterbild.',p:'ab 39 €',c:'deko erinnerung',col:'#F3EFE4',
+  s:'M62 180 L138 180 L138 62 C138 50 62 50 62 62Z'},
+ {n:'Schriftzug & Namensschild',d:'Für Tür, Hochzeit, Vereinsheim oder Schreibtisch.',p:'ab 19 €',c:'deko',col:'#5A635D',
+  s:'M28 180 L172 180 L172 168 L162 168 L162 100 L38 100 L38 168 L28 168Z'},
+ {n:'Ausstechform nach Motiv',d:'Für Plätzchen, Fondant oder Ton – jede Form ist möglich.',p:'ab 8 €',c:'deko',col:'#C7B08A',
+  s:'M100 34 L119 88 L172 90 L130 122 L146 176 L100 145 L54 176 L70 122 L28 90 L81 88Z'},
+ {n:'Gehäuse für Elektronik',d:'Für Raspberry Pi, Arduino und Sensoren – mit passenden Aussparungen.',p:'ab 25 €',c:'technik',col:'#56496A',
+  s:'M38 180 L162 180 L162 112 L38 112Z M34 104 L166 104 L166 90 L34 90Z'},
+ {n:'Prototyp nach CAD',d:'Testteile zum Anfassen, bevor in Serie gefertigt wird.',p:'nach Angebot',c:'technik',col:'#7E6A9E',
+  s:'M36 180 L164 180 L164 148 L82 148 L82 56 L36 56Z'},
+ {n:'Urne nach Wunsch',d:'Mit Namen, Motiv oder Relief, gemeinsam mit dir entworfen.',p:'ab 149 €',c:'erinnerung',col:'#B7A6CF',
+  s:'M62 180 L138 180 C142 170 156 150 156 120 C156 92 140 74 128 68 L128 56 L136 52 L136 44 L108 44 C108 32 92 32 92 44 L64 44 L64 52 L72 56 L72 68 C60 74 44 92 44 120 C44 150 58 170 62 180Z'},
+ {n:'Tierurne mit Namen',d:'Klein, würdig und persönlich – für den treuen Begleiter.',p:'ab 79 €',c:'erinnerung',col:'#C7B08A',
+  s:'M48 180 L152 180 L152 96 C152 74 130 62 100 62 C70 62 48 74 48 96Z'}
+];
+const ul=document.getElementById('products');
+P.forEach((it,i)=>{
+  const li=document.createElement('li');li.className='product rv';li.style.setProperty('--d',(i%2)*80+'ms');li.dataset.c=it.c;
+  li.innerHTML=`<svg viewBox="0 0 200 200" aria-hidden="true"><defs><clipPath id="cp${i}"><path d="${it.s}"/></clipPath></defs>
+    <ellipse cx="100" cy="184" rx="78" ry="5" fill="#1C1426" fill-opacity=".1"/>
+    <path d="${it.s}" fill="${it.col}"/><rect width="200" height="200" fill="url(#layers)" clip-path="url(#cp${i})"/></svg>
+    <div><h3>${it.n}</h3><p>${it.d}</p><div class="p-foot"><span class="price">${it.p}</span><a class="ask link" href="${mailto('Anfrage: '+it.n,`Hallo Make3D Studio,\n\nich interessiere mich für: ${it.n} (${it.p}).\n\nGröße / Maße: \nFarbe / Material: \nStückzahl: \nAbholung oder Versand: \n\nViele Grüße`)}">Anfragen</a></div></div>`;
+  ul.appendChild(li);
+});
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  const f=b.dataset.f;ul.querySelectorAll('.product').forEach(li=>{li.hidden=!(f==='alle'||li.dataset.c.split(' ').includes(f));});
+}));
+
+/* ---------------- Passt es? ---------------- */
+const H2C=[330,320,325],X2D=[256,256,260];
+const perms=a=>[[a[0],a[1],a[2]],[a[0],a[2],a[1]],[a[1],a[0],a[2]],[a[1],a[2],a[0]],[a[2],a[0],a[1]],[a[2],a[1],a[0]]];
+const fits=(d,v)=>perms(d).some(p=>p[0]<=v[0]&&p[1]<=v[1]&&p[2]<=v[2]);
+const pieces=(d,v)=>Math.min(...perms(d).map(p=>Math.ceil(p[0]/v[0])*Math.ceil(p[1]/v[1])*Math.ceil(p[2]/v[2])));
+const fg=document.getElementById('fit-g'),verdict=document.getElementById('verdict'),fm=document.getElementById('fit-mail');
+function drawFit(){
+  const d=['dl','dw','dh'].map(id=>Math.max(1,Math.min(2000,+document.getElementById(id).value||1)));
+  const s=Math.min(380/Math.max(330,d[0]),330/Math.max(325,d[2])),ox=30,base=370;
+  const r=(w,h,f,rx=6)=>`<rect x="${ox}" y="${base-h*s}" width="${w*s}" height="${h*s}" rx="${rx}" fill="${f}"/>`;
+  const tx=(t,x,y,f='#B9AFC5')=>`<text x="${x}" y="${y}" font-family="Geist, sans-serif" font-size="14" fill="${f}">${t}</text>`;
+  fg.innerHTML=r(330,325,'#3A2B4D')+r(256,260,'#5E4A7A')+r(d[0],d[2],'#C7B2EC',4)
+    +tx('H2C · A2L',ox+330*s-92,base-325*s+24)+tx('X2D',ox+256*s-40,base-260*s+24,'#F2EEF4')
+    +tx(`${d[0]} × ${d[2]} mm`,ox+10,Math.max(20,base-d[2]*s-10),'#F2EEF4');
+  let t;if(fits(d,X2D))t='Passt in alle drei Drucker – am Stück.';
+  else if(fits(d,H2C))t='Passt am Stück in den H2C und den A2L.';
+  else t=`Zu groß für einen Druck – wir teilen es in etwa ${pieces(d,H2C)} Teile und verbinden sie.`;
+  verdict.textContent=t;
+  fm.href=mailto('Anfrage mit Maßen '+d.join(' × ')+' mm',`Hallo Make3D Studio,\n\nmein Teil misst ca. ${d[0]} × ${d[1]} × ${d[2]} mm (L × B × H).\nEure Website sagt: ${t}\n\nDas soll entstehen: \nMaterial / Farbe: \nStückzahl: \n\nViele Grüße`);
+}
+document.getElementById('dims').addEventListener('input',drawFit);drawFit();
+
+/* ---------------- Reveals ---------------- */
+const rvs=[...document.querySelectorAll('.rv')];
+if(reduce||!('IntersectionObserver' in window)){rvs.forEach(el=>el.classList.add('in'));}
+else{
+  const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target);}}),{rootMargin:'0px 0px -6% 0px'});
+  rvs.forEach(el=>ro.observe(el));
+  const sweep=()=>{const vh=innerHeight;rvs.forEach(el=>{if(!el.classList.contains('in')&&el.getBoundingClientRect().top<vh)el.classList.add('in');});};
+  addEventListener('scroll',sweep,{passive:true});
+}
+</script>
 </body>
 </html>
